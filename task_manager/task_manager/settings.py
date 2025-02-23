@@ -147,3 +147,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 LOGIN_URL = '/login/'
 BASE_URL = 'https://django-task-manager-d6i9.onrender.com'
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
