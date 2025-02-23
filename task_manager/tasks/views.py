@@ -59,7 +59,7 @@ def login_view(request):
             response = requests.post(f"{settings.BASE_URL}/api/token/", data={
                 "username": username,
                 "password": password
-            })
+            }, timeout=5)
 
             if response.status_code == 200:
                 token = response.json().get("access")
