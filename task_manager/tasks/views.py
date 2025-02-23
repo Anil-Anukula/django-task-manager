@@ -64,7 +64,7 @@ def login_view(request):
             response = requests.post(f"{settings.BASE_URL}/api/token/", data={
                 "username": username,
                 "password": password
-            }, timeout=15)
+            }, timeout=30)
             response.raise_for_status()  # Raise an error for bad responses (4xx, 5xx)
         except requests.exceptions.RequestException as e:
             logger.error(f"JWT request error: {e}")

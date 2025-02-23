@@ -25,9 +25,9 @@ SECRET_KEY = 'django-insecure-ysf&+_$0ux)vf9_)@%osx6s%468%w7)gy#=jhi@uf(_ulbdoo9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['django-task-manager-d6i9.onrender.com']
+ALLOWED_HOSTS = ['django-task-manager-d6i9.onrender.com', '.onrender.com']
 
-
+CSRF_TRUSTED_ORIGINS = ["https://django-task-manager-d6i9.onrender.com"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -139,7 +139,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'tasks/static')]
+#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'tasks/static')]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
