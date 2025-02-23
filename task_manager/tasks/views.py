@@ -9,10 +9,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import IntegrityError
-
+import logging
 # Create your views here.
 
 TOKEN_KEY = "jwt_token"
+logger = logging.getLogger(__name__)
 
 def register_view(request):
     if request.method == "POST":
@@ -50,24 +51,34 @@ def login_view(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
-        # Authenticate user
         user = authenticate(username=username, password=password)
-        if user:
-            login(request, user)  # Log in user to session
+        if user is None:
+            logger.warning(f"Login failed for username: {username}")
+            return render(request, "tasks/login.html", {"error": "Invalid Credentials"})
 
-            # Get JWT token from API
+        login(request, user)
+        logger.info(f"User {username} authenticated successfully")
+
+        # Fetch JWT token
+        try:
             response = requests.post(f"{settings.BASE_URL}/api/token/", data={
                 "username": username,
                 "password": password
             }, timeout=5)
+            response.raise_for_status()  # Raise an error for bad responses (4xx, 5xx)
+        except requests.exceptions.RequestException as e:
+            logger.error(f"JWT request error: {e}")
+            return render(request, "tasks/login.html", {"error": "Server error. Try again later."})
 
-            if response.status_code == 200:
-                token = response.json().get("access")
-                request.session[TOKEN_KEY] = token  # Store JWT in session
-                request.session['user_id'] = user.id  # Store User ID in session
-                return redirect("index")
+        token = response.json().get("access")
+        if not token:
+            logger.error("JWT Token missing in API response")
+            return render(request, "tasks/login.html", {"error": "Authentication failed"})
 
-        return render(request, "tasks/login.html", {"error": "Invalid Credentials"})
+        request.session[TOKEN_KEY] = token
+        request.session['user_id'] = user.id  # Store user ID
+
+        return redirect("index")
 
     return render(request, "tasks/login.html")
 
