@@ -67,6 +67,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 ROOT_URLCONF = 'task_manager.urls'
