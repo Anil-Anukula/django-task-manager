@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import IntegrityError
 import logging
+from django.urls import reverse
 # Create your views here.
 
 TOKEN_KEY = "jwt_token"
@@ -61,7 +62,7 @@ def login_view(request):
 
         # Fetch JWT token
         try:
-            response = requests.post(f"{settings.BASE_URL}/api/token/", data={
+            response = requests.post(request.build_absolute_uri(reverse("token_obtain_pair"), data={
                 "username": username,
                 "password": password
             }, timeout=30)
