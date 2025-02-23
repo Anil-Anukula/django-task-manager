@@ -62,7 +62,7 @@ def login_view(request):
 
         # Fetch JWT token
         try:
-            response = requests.post(request.build_absolute_uri(reverse("token_obtain_pair"), data={
+            response = requests.post(request.build_absolute_uri(reverse("token_obtain_pair")), data={
                 "username": username,
                 "password": password
             }, timeout=30)
